@@ -4,9 +4,9 @@ import json
 import pymongo
 from datetime import datetime
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["cryptoData"]
-mycol = mydb["bitcoinPrices"]
+mongoClient = pymongo.MongoClient("mongodb://localhost:27017/")
+mongoDatabase = mongoClient["cryptoData"]
+mongoTable = mongoDatabase["bitcoinPrices"]
 
 def csvToMongodb(data):
     timestamp = str(datetime.fromtimestamp(int(data[0][:-3])))
@@ -25,4 +25,4 @@ def csvToMongodb(data):
 with open('../data/btcusd.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     mongoData = map(csvToMongodb, csv_reader)
-    mycol.insert_many(mongoData, ordered=False)
+    mongoTable.insert_many(mongoData, ordered=False)
